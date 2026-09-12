@@ -89,7 +89,7 @@ export async function processRawItems(items: RawSourceItem[]): Promise<PipelineR
         imageUrl: item.imageUrl,
         reason: decision.reason,
         safetyNotes: decision.safetyNotes,
-        suggestedPublishAt: decision.suggestedPublishAt ? new Date(decision.suggestedPublishAt) : undefined
+        suggestedPublishAt: parseOptionalDate(decision.suggestedPublishAt)
       }
     });
 
@@ -213,4 +213,10 @@ function shouldAutoPublish(confidence: number) {
 function toJson(value: unknown): Prisma.InputJsonValue | undefined {
   if (value === undefined) return undefined;
   return value as Prisma.InputJsonValue;
+}
+
+function parseOptionalDate(value: string | undefined) {
+  if (!value) return undefined;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date;
 }

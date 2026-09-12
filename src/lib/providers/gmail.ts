@@ -4,6 +4,12 @@ import { googleOAuthClient } from "@/lib/providers/googleAuth";
 import type { RawSourceItem } from "@/lib/types";
 import { cleanText, truncate } from "@/lib/utils/text";
 
+type GmailPayload = {
+  mimeType?: string | null;
+  body?: { data?: string | null } | null;
+  parts?: GmailPayload[] | null;
+};
+
 export async function fetchStudentEmails(): Promise<RawSourceItem[]> {
   if (!hasGmailConfig()) return [];
 
@@ -61,27 +67,20 @@ function header(headers: Array<{ name?: string | null; value?: string | null }>,
   return headers.find((item) => item.name?.toLowerCase() === name)?.value ?? "";
 }
 
-function extractBody(payload: NonNullable<Parameters<typeof walkParts>[0]>): string {
+function extractBody(payload: GmailPayload | null | undefined): string {
+  if (!payload) return "";
   const parts = walkParts(payload);
   const preferred = parts.find((part) => part.mimeType === "text/plain") ?? parts[0];
   if (!preferred?.body?.data) return "";
   return cleanText(Buffer.from(preferred.body.data, "base64url").toString("utf8"));
 }
 
-function walkParts(payload: {
-  mimeType?: string | null;
-  body?: { data?: string | null } | null;
-  parts?: Array<{
-    mimeType?: string | null;
-    body?: { data?: string | null } | null;
-    parts?: unknown[] | null;
-  }> | null;
-}) {
+function walkParts(payload: GmailPayload) {
   const result: Array<{ mimeType?: string | null; body?: { data?: string | null } | null }> = [];
 
-  function visit(part: typeof payload) {
+  function visit(part: GmailPayload) {
     if (part.body?.data) result.push({ mimeType: part.mimeType, body: part.body });
-    part.parts?.forEach((child) => visit(child as typeof payload));
+    part.parts?.forEach((child) => visit(child));
   }
 
   visit(payload);

@@ -1,8 +1,8 @@
 import { Queue } from "bullmq";
-import { env } from "@/lib/config";
+import { createRedisConnection } from "@/lib/redis";
 
 export const automationQueue = new Queue("automation", {
-  connection: { url: env.REDIS_URL }
+  connection: createRedisConnection()
 });
 
 export async function enqueueFullRun() {

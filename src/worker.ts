@@ -1,6 +1,7 @@
 import cron from "node-cron";
 import { Worker } from "bullmq";
 import { env } from "@/lib/config";
+import { createRedisConnection } from "@/lib/redis";
 import { runFullAutomation, runGmailAutomation, runSourceAutomation } from "@/lib/workflows/pipeline";
 
 const worker = new Worker(
@@ -10,7 +11,7 @@ const worker = new Worker(
     if (job.name === "source-run") return runSourceAutomation();
     return runFullAutomation();
   },
-  { connection: { url: env.REDIS_URL } }
+  { connection: createRedisConnection() }
 );
 
 worker.on("completed", (job) => {

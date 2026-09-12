@@ -138,7 +138,7 @@ Create a Meta app, connect the Facebook Page, and generate a Page access token w
 ```env
 FACEBOOK_PAGE_ID=""
 FACEBOOK_PAGE_ACCESS_TOKEN=""
-FACEBOOK_GRAPH_VERSION="v23.0"
+FACEBOOK_GRAPH_VERSION="v26.0"
 ```
 
 I kept the Facebook part as official API publishing. For monitoring other Facebook pages, this project uses configured source URLs and Google search instead of login-based scraping, because raw scraping of Facebook pages is unreliable and can break platform rules.
