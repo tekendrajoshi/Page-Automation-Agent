@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SourceType {
+  IOE_EXAM
+  WEB
+  GMAIL
+  SEARCH
+  MANUAL
+}
+
+enum ProposalStatus {
+  DRAFT
+  NEEDS_REVIEW
+  APPROVED
+  REJECTED
+  PUBLISHED
+  FAILED
+}
+
+enum RunType {
+  SOURCES
+  GMAIL
+  PUBLISH
+  FULL
+}
+
+enum RunStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+model SourceItem {
+  id             String         @id @default(cuid())
+  sourceType     SourceType
+  sourceName     String
+  sourceUrl      String?
+  externalId     String?
+  title          String
+  body           String?
+  imageUrl       String?
+  rawJson        Json?
+  contentHash    String         @unique
+  discoveredAt   DateTime       @default(now())
+  proposals      PostProposal[]
+
+  @@index([sourceType, discoveredAt])
+}
+
+model PostProposal {
+  id                 String          @id @default(cuid())
+  sourceItemId        String?
+  sourceItem          SourceItem?     @relation(fields: [sourceItemId], references: [id], onDelete: SetNull)
+  status              ProposalStatus  @default(NEEDS_REVIEW)
+  category            String
+  relevanceScore      Float
+  confidence          Float
+  title               String
+  caption             String
+  imageUrl            String?
+  reason              String
+  safetyNotes         String?
+  suggestedPublishAt  DateTime?
+  facebookPostId      String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  approvedAt          DateTime?
+  publishedAt         DateTime?
+  rejectedAt          DateTime?
+  errorMessage        String?
+  approvals           ApprovalEvent[]
+
+  @@index([status, createdAt])
+}
+
+model ApprovalEvent {
+  id          String       @id @default(cuid())
+  proposalId  String
+  proposal    PostProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  action      String
+  actorEmail  String?
+  note        String?
+  createdAt   DateTime     @default(now())
+}
+
+model AutomationRun {
+  id          String    @id @default(cuid())
+  type        RunType
+  status      RunStatus @default(RUNNING)
+  startedAt   DateTime  @default(now())
+  finishedAt  DateTime?
+  itemsSeen   Int       @default(0)
+  proposals   Int       @default(0)
+  published   Int       @default(0)
+  error       String?
+  meta        Json?
+}
+
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}

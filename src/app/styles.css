@@ -1,0 +1,391 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f6f8;
+  --panel: #ffffff;
+  --ink: #182026;
+  --muted: #65727e;
+  --line: #dce3e8;
+  --brand: #0b6bcb;
+  --brand-dark: #084a8f;
+  --green: #147d52;
+  --red: #b42318;
+  --amber: #9a6700;
+  --teal: #0f766e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+main {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(30px, 5vw, 54px);
+  line-height: 1.02;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-size: 20px;
+}
+
+h3 {
+  margin: 8px 0 0;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.runActions,
+.proposalActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actionButton {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 0 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.actionButton:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.actionButton.approve,
+.actionButton.run {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: white;
+}
+
+.actionButton.reject {
+  color: var(--red);
+}
+
+.actionButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.notice {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: #fff8ea;
+  color: var(--amber);
+  font-weight: 700;
+}
+
+.notice.danger {
+  background: #fff3f0;
+  color: var(--red);
+}
+
+.statusGrid,
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.statusItem,
+.metric,
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.statusItem {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.statusItem svg {
+  color: var(--brand);
+}
+
+.statusItem span,
+.metric span,
+.runItem span,
+.details {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.statusItem strong,
+.metric strong {
+  display: block;
+  margin-top: 3px;
+}
+
+.metric {
+  padding: 16px;
+}
+
+.metric strong {
+  font-size: 28px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+  align-items: start;
+}
+
+.panel {
+  padding: 18px;
+}
+
+.sectionHeader,
+.proposalTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.proposalList,
+.runList {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.proposal {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.caption {
+  margin: 14px 0;
+  color: #2c3842;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 12px;
+  text-transform: capitalize;
+}
+
+.reason,
+.safety {
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.safety {
+  border-left: 3px solid var(--amber);
+  padding-left: 10px;
+  color: var(--amber);
+}
+
+.score {
+  display: grid;
+  flex: 0 0 58px;
+  height: 58px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--brand-dark);
+  font-weight: 900;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  border-radius: 999px;
+  padding: 0 9px;
+  background: #e9eef3;
+  color: #40505c;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.badge.needs_review,
+.badge.running {
+  background: #fff1cc;
+  color: var(--amber);
+}
+
+.badge.published,
+.badge.success,
+.badge.approved {
+  background: #dcfce7;
+  color: var(--green);
+}
+
+.badge.failed,
+.badge.rejected {
+  background: #ffe4df;
+  color: var(--red);
+}
+
+.sourceLink {
+  display: inline-flex;
+  margin-bottom: 14px;
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.sourceLink:hover {
+  text-decoration: underline;
+}
+
+.emptyState {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  margin-top: 18px;
+  padding: 32px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.emptyState.compact {
+  margin-top: 0;
+  padding: 18px;
+}
+
+.runItem {
+  display: grid;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+.runItem:last-child {
+  border-bottom: 0;
+}
+
+.runItem div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.runItem small {
+  color: var(--muted);
+}
+
+@media (max-width: 980px) {
+  main {
+    padding: 20px;
+  }
+
+  .topbar,
+  .layout {
+    display: block;
+  }
+
+  .runActions {
+    margin-top: 18px;
+  }
+
+  .statusGrid,
+  .metricGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .runPanel {
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 620px) {
+  main {
+    padding: 16px;
+  }
+
+  .statusGrid,
+  .metricGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionButton {
+    width: 100%;
+  }
+
+  .proposalTop {
+    align-items: flex-start;
+  }
+}
